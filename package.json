@@ -9,6 +9,7 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:changed": "jest --onlyChanged",
     "test:coverage": "jest --coverage",
     "test:playwright": "playwright test",
     "test:playwright:ui": "playwright test --ui",
