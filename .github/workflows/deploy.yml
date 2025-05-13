@@ -1,35 +1,58 @@
-# workflow의 이름
-name: Github Actions 연습하기
+# Workflow의 이름
+# 하나의 yml 파일을 하나의 workflow라고 말합니다.
+name: Github Actions로 CI 연습하기
 
-# Event
-# 언제 워크플로우를 실행할지
+# Event: 언제 이 workflow를 실행할거야?
+# push: 코드를 github에 push할 때마다
+# branches: 특정 브랜치에 push할 때만 실행
+# - main: main 브랜치에 push할 때만 실행
 on:
   push:
     branches:
+      - main
+  pull_request:
+    branches:
       - "**"
 
-# 워크플로우의 일을 정의
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true # 이미 실행 중인 이전 워크플로우를 취소합니다
+
+# workflows -> 여러 개의 jobs로 구성
 jobs:
-  # jobs의 이름
+  # job의 이름 -> 내 마음대로 지정해도 됨
   my-job:
-    # Github Actions가 실행된 서버 종류를 선택하는 것
+    # github actions를 실행시킬 서버 종류를 선택
     runs-on: ubuntu-latest
 
-    # jobs의 단계
     steps:
-      - name: Github Repository 파일 불러오기
+      - name: Github Repository에서 파일 불러오기
         uses: actions/checkout@v4
 
       - name: Node 설치
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: 20
 
-      - name: 의존성(라이브러리) 설치
+      - name: 의존성 설치
         run: npm ci
 
-      - name: 테스트 실행하기
+      - name: 테스트 실행
         run: npm run test
 
       - name: 빌드하기
         run: npm run build
+
+  deploy:
+    needs: my-job # my-job이 성공적으로 완료된 후에만 실행
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 배포하기
+        run: echo "배포 시작"
