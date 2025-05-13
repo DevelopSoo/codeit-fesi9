@@ -5,7 +5,7 @@ export default function Home() {
     <>
       <h1>게시글 목록</h1>
       <SnapshotButton>클릭</SnapshotButton>
-      <div>내 환경: {process.env.NEXT_PUBLIC_MY_ENVIRONMENT}</div>
+      speedInsight 배포
     </>
   );
 }
