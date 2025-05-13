@@ -4,6 +4,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import * as Sentry from "@sentry/nextjs";
+
+function isValidEmail(email: string) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,9 +23,38 @@ export default function LoginPage() {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/products");
+    if (!isValidEmail(values.email)) {
+      alert("정확한 이메일 형식을 지켜주세요.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+          return;
+        } else {
+          throw new Error(
+            `로그인 요청 에러!: ${response.status} ${response.statusText}`,
+          );
+        }
+      }
+
+      await response.json();
+      router.push("/products");
+    } catch (error) {
+      Sentry.captureException(error);
+    }
   };
   return (
     <>
