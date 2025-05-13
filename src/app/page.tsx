@@ -1,4 +1,4 @@
-import SnapshotButton from "@/components/SnapshotButton";
+import SnapshotButton from '@/components/SnapshotButton';
 
 export default function Home() {
   return (
