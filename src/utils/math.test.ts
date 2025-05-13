@@ -23,5 +23,5 @@ test("모듈이 다 모킹됐는지 테스트", () => {
   expect(math.subtract(10, 1)).toBe(9);
   expect(math.multiply(2, 3)).toBe(6);
   expect(math.divide(10, 2)).toBe(5);
-  expect(math.divide(10, 0)).toThrow("Division by zero");
+  expect(() => math.divide(10, 0)).toThrow("Division by zero");
 });
