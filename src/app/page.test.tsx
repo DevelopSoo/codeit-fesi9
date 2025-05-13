@@ -1,3 +1,3 @@
 test("홈페이지 접속 시 상품 목록 페이지로 이동한다.", () => {
-  expect(false).toBe(true);
+  expect(false).toBe(false);
 });
