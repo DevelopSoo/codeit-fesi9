@@ -10,6 +10,7 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jest-fixed-jsdom",
+  coverageReporters: ["json", "text", "lcov", "clover", "json-summary"],
   testPathIgnorePatterns: ["<rootDir>/tests/", "<rootDir>/tests-examples/"],
   // 테스트 전에 실행할 설정 파일을 지정
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
