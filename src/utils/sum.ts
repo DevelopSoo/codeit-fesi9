@@ -1,10 +1,21 @@
-// src/utils/arrayUtils.ts
-export function processArray(arr: number[]) {
-  if (!Array.isArray(arr) || arr.length === 0) return null;
+// 목(MOCK)을 쓰는 이유
+// 필요한 것만 테스트하고, 불필요한 건 가짜로 만들자
+
+export const getUser = async (userId: string) => {
+  // 1. API 요청
+  // 와이파이가 끊겨
+  // 백엔드 서버가 끊겨 -> 고장 => 테스트 실패 => 어?? 내 잘못인가?
+
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${userId}`,
+  );
+  const data = await response.json();
+  // 2. 가공 -> 이게 복잡해!!!!
+  // 정렬 or 추가, 빼기, ......
+
   return {
-    sum: arr.reduce((a, b) => a + b, 0),
-    average: arr.reduce((a, b) => a + b, 0) / arr.length,
-    max: Math.max(...arr),
-    min: Math.min(...arr),
+    ...data,
+    age: 20,
+    gender: "male",
   };
-}
+};
